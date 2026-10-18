@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173879">
+  <meta name="description" content="Informasi pasien Rumah Sakit eMKA. Pilih informasi yang ingin Anda baca.">
+  <title>Informasi Pasien | Rumah Sakit eMKA</title>
+  <style>
+    :root {
+      --navy: #153675;
+      --indigo: #292776;
+      --blue: #2c73bb;
+      --teal: #11b9bd;
+      --ink: #15336b;
+      --body: #41658f;
+      --line-blue: #d4e6ff;
+      --line-teal: #c9f0f3;
+      --pale-blue: #e7f1ff;
+      --pale-teal: #e0f8f8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--ink);
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(ellipse at 8% 10%, rgba(107,178,233,.15), transparent 35%),
+        radial-gradient(ellipse at 95% 65%, rgba(17,185,189,.12), transparent 32%),
+        #f7fbff;
+    }
+    .page {
+      width: min(100%, 760px);
+      position: relative;
+      overflow: hidden;
+      padding: 34px clamp(20px, 5vw, 48px) 22px;
+      border: 1px solid rgba(186, 212, 241, .55);
+      border-radius: 28px;
+      background:
+        radial-gradient(ellipse at 0% 8%, rgba(215,238,255,.75), transparent 32%),
+        radial-gradient(ellipse at 100% 35%, rgba(216,248,251,.68), transparent 31%),
+        linear-gradient(145deg, #fff 0%, #fbfdff 62%, #f3fbff 100%);
+      box-shadow: 0 18px 55px rgba(28, 67, 119, .12);
+    }
+    .page::before, .page::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      pointer-events: none;
+      left: -10%;
+      width: 120%;
+      height: 100px;
+      opacity: .8;
+      border-radius: 50%;
+    }
+    .page::before {
+      bottom: -65px;
+      background: linear-gradient(100deg, #2b85d0, #13b9bd);
+      transform: rotate(2deg);
+    }
+    .page::after {
+      bottom: -42px;
+      background: linear-gradient(100deg, rgba(90,174,232,.48), rgba(98,224,221,.45));
+      transform: rotate(-3deg);
+    }
+    .content { position: relative; z-index: 1; }
+    .brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 18px;
+      width: min(100%, 500px);
+    }
+    .brand img {
+      display: block;
+      width: 100%;
+      max-height: 150px;
+      object-fit: contain;
+    }
+    .heading-rule {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 8px auto 18px;
+      width: min(100%, 330px);
+    }
+    .heading-rule span { height: 2px; flex: 1; background: #d8e4f1; }
+    .heading-rule i { display: block; width: 36px; height: 4px; border-radius: 5px; background: var(--teal); }
+    h1 {
+      margin: 0;
+      text-align: center;
+      color: var(--navy);
+      font-size: clamp(22px, 4.5vw, 31px);
+      line-height: 1.2;
+      letter-spacing: 1.1px;
+      font-weight: 850;
+    }
+    .subtitle {
+      margin: 8px 0 28px;
+      text-align: center;
+      color: var(--body);
+      font-size: clamp(15px, 2.8vw, 20px);
+      line-height: 1.5;
+    }
+    .links { display: grid; gap: 12px; }
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: clamp(13px, 3vw, 22px);
+      min-height: 112px;
+      padding: clamp(13px, 2.7vw, 18px);
+      text-decoration: none;
+      color: inherit;
+      border: 1.5px solid var(--line-blue);
+      border-radius: 23px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 5px 16px rgba(44, 105, 177, .045);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .link-card:hover, .link-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: #9ec8fa;
+      box-shadow: 0 10px 24px rgba(44, 105, 177, .12);
+      outline: none;
+    }
+    .link-card:nth-child(2) { border-color: var(--line-teal); }
+    .link-icon {
+      flex: 0 0 clamp(62px, 12vw, 92px);
+      width: clamp(62px, 12vw, 92px);
+      height: clamp(62px, 12vw, 92px);
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      color: #0c4b9d;
+      background: linear-gradient(145deg, #e0edff, #d9eaff);
+    }
+    .link-card:nth-child(2) .link-icon { color: #087e9c; background: linear-gradient(145deg, #dff8f7, #d5f4f4); }
+    .link-card:nth-child(3) .link-icon { color: #153d91; }
+    .link-icon svg { width: 52%; height: 52%; stroke: currentColor; }
+    .link-copy { flex: 1; min-width: 0; }
+    .link-title {
+      display: block;
+      color: var(--navy);
+      font-weight: 800;
+      font-size: clamp(16px, 3.3vw, 23px);
+      line-height: 1.3;
+    }
+    .link-desc {
+      display: block;
+      margin-top: 5px;
+      color: var(--body);
+      font-size: clamp(13px, 2.6vw, 17px);
+      line-height: 1.45;
+    }
+    .arrow {
+      flex: 0 0 46px;
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--navy);
+      background: #e5efff;
+    }
+    .link-card:nth-child(2) .arrow { background: #def6fa; }
+    .arrow svg { width: 23px; height: 23px; stroke: currentColor; }
+    .footer {
+      margin: 25px auto 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: #3f6591;
+      font-size: 13px;
+      font-style: italic;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+    .footer span { height: 1.5px; width: 70px; background: #91aecb; }
+    .small-note { margin: 0; text-align: center; color: #6584a5; font-size: 10px; }
+    @media (max-width: 480px) {
+      body { padding: 10px; align-items: flex-start; }
+      .page { padding: 26px 15px 24px; border-radius: 22px; }
+      .brand { margin-bottom: 14px; }
+      .brand img { max-height: 105px; }
+      .subtitle { margin-bottom: 22px; }
+      .link-card { min-height: 94px; border-radius: 18px; }
+      .link-icon { border-radius: 15px; }
+      .arrow { flex-basis: 36px; width: 36px; height: 36px; }
+      .footer { gap: 8px; letter-spacing: 2px; font-size: 11px; }
+      .footer span { width: 36px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="content">
+      <header>
+        <div class="brand">
+          <img src="logo-emka.png" alt="Logo Rumah Sakit eMKA">
+        </div>
+        <div class="heading-rule" aria-hidden="true"><span></span><i></i><span></span></div>
+        <h1>INFORMASI PASIEN</h1>
+        <p class="subtitle">Silakan pilih informasi yang ingin Anda baca</p>
+      </header>
+
+      <nav class="links" aria-label="Pilihan informasi pasien">
+        <a class="link-card" href="https://drive.google.com/file/d/1XDBO7h4HPlVDGOMtKgbB0j1cfbZKXX52/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M27 5H11a4 4 0 0 0-4 4v30a4 4 0 0 0 4 4h26a4 4 0 0 0 4-4V19z"/><path d="M27 5v14h14M15 27h17M15 34h13"/></svg>
+          </span>
+          <span class="link-copy"><span class="link-title">Hak dan Kewajiban Pasien</span><span class="link-desc">Dokumen informasi hak dan kewajiban pasien</span></span>
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></span>
+        </a>
+
+        <a class="link-card" href="https://drive.google.com/drive/folders/1WzmvFCyyPg26ysHuxLBZKMHOL9_Kl6tX?usp=drive_link" target="_blank" rel="noopener noreferrer">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9c8-4 14-3 19 2v31c-5-5-11-6-19-2z"/><path d="M43 9c-8-4-14-3-19 2v31c5-5 11-6 19-2z"/></svg>
+          </span>
+          <span class="link-copy"><span class="link-title">Leaflet</span><span class="link-desc">Kumpulan leaflet rumah sakit</span></span>
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></span>
+        </a>
+
+        <a class="link-card" href="https://drive.google.com/drive/folders/1SFD7p_aYm7l3j1RadtOY4i1TRNkWiDJM?usp=drive_link" target="_blank" rel="noopener noreferrer">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="9" width="32" height="35" rx="4"/><path d="M18 9V6a6 6 0 0 1 12 0v3M16 21h3M24 21h8M16 30h3M24 30h8M16 38h3M24 38h8"/></svg>
+          </span>
+          <span class="link-copy"><span class="link-title">Tata Tertib</span><span class="link-desc">Informasi tata tertib rumah sakit</span></span>
+          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></span>
+        </a>
+      </nav>
+
+      <footer class="footer"><span></span><strong>Melayani dengan Hati</strong><span></span></footer>
+      <p class="small-note">Rumah Sakit eMKA · Informasi untuk pasien dan pengunjung</p>
+    </div>
+  </main>
+</body>
+</html>
